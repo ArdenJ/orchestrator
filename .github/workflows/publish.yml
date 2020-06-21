@@ -1,0 +1,27 @@
+name: Build Image and Publish to Docker Hub
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+    # check out project source code
+    - uses: actions/checkout@v2
+    
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+
+    # publishes image to Docker Hub 
+    - name: Publish to Hub
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        # the name of image
+        name: ardenj/catalogue-service
+        # Here we pass in Docker Username
+        username: ${{ secrets.DOCKER_USERNAME }}
+        # and Docker password which 
+        password: ${{ secrets.DOCKER_PASSWORD }}
