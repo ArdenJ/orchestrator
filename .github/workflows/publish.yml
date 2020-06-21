@@ -7,10 +7,14 @@ on:
 
 jobs:
   build-and-publish:
+    env:
+      GOPATH: ${{ github.workspace }}
     runs-on: ubuntu-latest
     steps:
     # check out project source code
     - uses: actions/checkout@v2
+      with: 
+        path: ./src/github.com/${{ github.repository }}
     
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
