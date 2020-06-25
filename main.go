@@ -12,6 +12,7 @@ import (
 	"github.com/arrrden/orchestrator/handlers"
 )
 
+// PORT variable
 var PORT = "7070"
 
 func main() {

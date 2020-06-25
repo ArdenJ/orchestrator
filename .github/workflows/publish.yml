@@ -11,9 +11,7 @@ jobs:
     steps:
     # check out project source code
     - uses: actions/checkout@v2
-      # with: 
-      #   path: ./src/github.com/${{ github.repository }}
-    
+     
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
 
@@ -21,9 +19,9 @@ jobs:
     - name: Publish to Hub
       uses: elgohr/Publish-Docker-Github-Action@master
       with:
-        # the name of image
+        # name of image
         name: ardenj/catalogue-service
-        # Here we pass in Docker Username
+        # Docker Username
         username: ${{ secrets.DOCKER_USERNAME }}
-        # and Docker password which 
+        # Docker password  
         password: ${{ secrets.DOCKER_PASSWORD }}
