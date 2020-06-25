@@ -15,10 +15,8 @@ func (c *Catalogue) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		c.getCatalogue(w, r)
-		break
 	case http.MethodPost:
 		c.addWork(w, r)
-		break
 	default:
 		w.WriteHeader(http.StatusMethodNotAllowed)
 	}

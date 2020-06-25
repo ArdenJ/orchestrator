@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/arrrden/orchestrator/handlers"
@@ -44,14 +45,20 @@ func main() {
 	}()
 
 	// Create cancel conext defer shutdown
-	ctx, _ := context.WithTimeout(context.Background(), 30*time.Second)
-	defer s.Shutdown(ctx)
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+	defer func() {
+		err := s.Shutdown(ctx)
+		if err != nil {
+			l.Fatal(err)
+		}
+	}()
 
 	// Channel blocks server from closing
 	// sender
-	sigChan := make(chan os.Signal)
+	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, os.Interrupt)
-	signal.Notify(sigChan, os.Kill)
+	signal.Notify(sigChan, syscall.SIGTERM)
 
 	// receiver
 	sig := <-sigChan
